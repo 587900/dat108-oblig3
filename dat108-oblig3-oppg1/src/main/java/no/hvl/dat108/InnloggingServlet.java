@@ -1,4 +1,4 @@
-package no.hvl.dat198;
+package no.hvl.dat108;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,14 +19,7 @@ public class InnloggingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-    	
-        // Inn noe kode her i forbindelse med evt. feilmeldinger?
-    	String feilmelding = "";
-		String feilkode = request.getParameter("feilkode");
-		if (feilkode != null && feilkode.equals("invalidusername")) {
-			feilmelding = "Ugyldig...";
-		}
-        
+       
         response.setContentType("text/html");
 
         PrintWriter out = response.getWriter();
@@ -35,11 +28,14 @@ public class InnloggingServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head>");
         out.println("<meta charset=\"UTF-8\">");
-        out.println("<title>Log inn</title>");
+        out.println("<title>Logg inn</title>");
         out.println("</head>");
         out.println("<body>");
         	out.println("<form method=\"post\">");
-        	out.println("Gi inn passord:<input type=\"password\" name=\"password\"/><br/>");
+        	if("wrongpassword".equals(request.getParameter("error"))) {
+        		out.println("Passordet du skrev inn var feil. Prøv igjen.<br/>");
+        	} else { out.println("Gi inn passord:<br/>"); }
+        	out.println("<input type=\"password\" name=\"password\"/><br/>");
         	out.println("<input type=\"submit\" value=\"Logg inn\"/>");
         	out.println("</form>");
         out.println("</body>");

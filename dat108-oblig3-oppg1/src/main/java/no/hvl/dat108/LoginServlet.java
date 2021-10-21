@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class InnloggingServlet
  */
 @WebServlet("/login")
-public class InnloggingServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     @Override
@@ -47,12 +47,10 @@ public class InnloggingServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		boolean success = LogInnUtil.loggInn(request, request.getParameter("password"));
+		boolean success = LoginUtil.loggInn(request, request.getParameter("password"));
 		
 		if(success) response.sendRedirect("/handleliste");
 		else response.sendRedirect("/login?error=wrongpassword");
-		
-		doGet(request, response);
 	}
 
 }

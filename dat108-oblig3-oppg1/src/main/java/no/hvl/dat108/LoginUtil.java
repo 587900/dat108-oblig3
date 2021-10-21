@@ -1,12 +1,27 @@
 package no.hvl.dat108;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class LogInnUtil {
+public class LoginUtil {
 
-	private static String correctPassword = "dat108";
-	private static int maxInactiveInterval = 60;
+	private static String correctPassword;
+	private static int maxInactiveInterval;
+	
+	static {
+		try {
+			Context ctx = new InitialContext();
+			Context env = (Context) ctx.lookup("java:comp/env");
+			correctPassword = (String) env.lookup("plaintext-password");
+			maxInactiveInterval = (int) env.lookup("max-inactive-interval");
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 	
 	// Returns true if login success, false otherwise
 	public static boolean loggInn(HttpServletRequest request, String password) {

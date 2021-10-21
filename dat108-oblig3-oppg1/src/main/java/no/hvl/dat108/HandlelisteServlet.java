@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,9 +25,9 @@ public class HandlelisteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if(!LogInnUtil.erInnlogget(request)) { response.sendRedirect("/login"); return; }
+		if(!LoginUtil.erInnlogget(request)) { response.sendRedirect("/login"); return; }
 		
-		response.setContentType("text/html");
+		response.setContentType("text/html; charset=utf-8");
 
         PrintWriter out = response.getWriter();
 
@@ -64,13 +65,14 @@ public class HandlelisteServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		if(!LogInnUtil.erInnlogget(request)) { response.sendRedirect("/login"); return; }
+		if(!LoginUtil.erInnlogget(request)) { response.sendRedirect("/login"); return; }
 
 		if(!isValidPostInput(request)) { response.sendError(400); return; }
 		
 		switch (request.getParameter("type")) {
 		case "add":
 			String product = request.getParameter("product");
+			product = escapeHTML(product);
 			if(!product.equals("")) handleliste.leggTil(product);
 			break;
 		case "remove":
@@ -103,5 +105,25 @@ public class HandlelisteServlet extends HttpServlet {
 		}
 		return true;
 	}
-
+	
+//	public static String escapeHTML(String s) {
+//	    StringBuilder out = new StringBuilder();
+//	    for (int i = 0; i < s.length(); i++) {
+//	        char c = s.charAt(i);
+//	        if (c > 127 || c == '"' || c == '\'' || c == '<' || c == '>' || c == '&') {
+//	            out.append("&#");
+//	            out.append((int) c);
+//	            out.append(';');
+//	        } else {
+//	            out.append(c);
+//	        }
+//	    }
+//	    return out.toString();
+//	}
+	// TODO KJETIL: Test med Unicode Symbols
+	public static String escapeHTML(String str) {
+	    return str.codePoints().mapToObj(c -> c > 127 || "\"'<>&".indexOf(c) != -1 ?
+	            "&#" + Integer.toHexString((int) c) + ";" : new String(Character.toChars(c)))
+	       .collect(Collectors.joining());
+	}
 }

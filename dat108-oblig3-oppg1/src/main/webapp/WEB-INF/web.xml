@@ -9,4 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <env-entry>
+  	<env-entry-name>plaintext-password</env-entry-name>
+  	<env-entry-type>java.lang.String</env-entry-type>
+  	<env-entry-value>dat108</env-entry-value>
+  </env-entry>
+  <env-entry>
+  	<env-entry-name>max-inactive-interval</env-entry-name>
+  	<env-entry-type>java.lang.Integer</env-entry-type>
+  	<env-entry-value>60</env-entry-value>
+  </env-entry>
 </web-app>

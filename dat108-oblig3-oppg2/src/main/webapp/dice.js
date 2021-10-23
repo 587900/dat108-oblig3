@@ -1,3 +1,8 @@
+/*
+ * Vi kan godt ha Dice.roll() lagre verdien i en variabel/property "value", og deretter referere til Dice.value,
+ * men vi mener å få retur-verdien direkte i fra Dice.roll() er renere.
+ */
+
 class Dice {
 	
 	roll() {
